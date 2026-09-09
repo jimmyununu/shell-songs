@@ -9,8 +9,10 @@ import java.util.List;
  * <p>
  * The shells cover a single F-major scale without an upper octave: C D E F G A A#.
  * Every built-in song therefore fits inside that range; a few well-known tunes are transposed
- * (Old MacDonald, Au Clair de la Lune, Seven Nation Army) or shortened (marked in the title)
- * to make them fit.
+ * (Old MacDonald, Au Clair de la Lune) or shortened (marked in the title) to make them fit.
+ * <p>
+ * Only public-domain material belongs here: nursery rhymes, folk songs, carols and classical
+ * themes. Do not add songs that are still in copyright.
  */
 public final class SongLibrary
 {
@@ -33,10 +35,8 @@ public final class SongLibrary
 		"Camptown Races (verse): G G E G A G E | E D | E D | G G E G A G E | D E D C",
 		"Frere Jacques (first four lines): C D E C | C D E C | E F G | E F G | G A G F E C | G A G F E C",
 		"Rain, Rain, Go Away: G E G G E | G G E A G E | G G E A G E | G E G G E",
-		"Baby Shark: D E G G G G G G G | D E G G G G G G G | D E G G G G G G G | D E G",
 		"We Wish You a Merry Christmas (chorus): C F F G F E D D | D G G A G F E C | C A A A# A G F D | C C D G E F",
 		"O Christmas Tree (first lines): C F F F G A A A | G A A# E G F | C F F F G A A A | G A A# E G F",
-		"Seven Nation Army (riff): D D F D C A# A | D D F D C A# A",
 	};
 
 	private static final List<Song> BUILT_IN_SONGS;

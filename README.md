@@ -8,7 +8,7 @@ Pick a song in the sidebar and the plugin tells you which shell to play next. Wh
 
 ## Features
 
-- **Song book** with 22 built-in tunes that fit the seven notes (C D E F G A A#).
+- **Song book** with 20 built-in public-domain tunes (nursery rhymes, folk songs, carols and classical themes) that fit the seven notes (C D E F G A A#).
 - **Follow along**: the panel advances when you play the correct shell and tells you which shell you hit when you play a wrong one.
 - **Click counter**: when a note repeats, the panel says how many times in a row to click that shell and counts down as you go.
 - **Loop**: tick "Loop song" in the panel (or the settings) to go straight back to the first note after the last, so short tunes keep playing.
