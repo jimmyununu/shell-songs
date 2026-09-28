@@ -7,7 +7,15 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.swing.SwingUtilities;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Client;
+import net.runelite.api.GameState;
+import net.runelite.api.Item;
+import net.runelite.api.ItemContainer;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.MenuOptionClicked;
+import net.runelite.api.gameval.InventoryID;
+import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -32,6 +40,12 @@ import net.runelite.client.util.ImageUtil;
 )
 public class ShellSongsPlugin extends Plugin
 {
+	@Inject
+	private Client client;
+
+	@Inject
+	private ClientThread clientThread;
+
 	@Inject
 	private ShellSongsConfig config;
 
@@ -60,6 +74,9 @@ public class ShellSongsPlugin extends Plugin
 	private String feedback;
 	private boolean feedbackIsError;
 
+	/** True while a musical shell or the packed Shell collection is in the inventory. */
+	private volatile boolean shellsInInventory;
+
 	@Override
 	protected void startUp()
 	{
@@ -77,6 +94,7 @@ public class ShellSongsPlugin extends Plugin
 		overlayManager.add(overlay);
 		overlayManager.add(highlightOverlay);
 
+		clientThread.invoke(this::refreshShellsInInventory);
 		reloadSongs();
 		final boolean loop = config.loopSong();
 		SwingUtilities.invokeLater(() ->
@@ -97,6 +115,7 @@ public class ShellSongsPlugin extends Plugin
 		clientToolbar.removeNavigation(navButton);
 		navButton = null;
 		panel = null;
+		shellsInInventory = false;
 
 		synchronized (this)
 		{
@@ -166,6 +185,58 @@ public class ShellSongsPlugin extends Plugin
 		onShellPlayed(played, config.advanceOnAnyShell(), config.loopSong());
 	}
 
+	@Subscribe
+	public void onItemContainerChanged(ItemContainerChanged event)
+	{
+		if (event.getContainerId() == InventoryID.INV)
+		{
+			shellsInInventory = containsShells(event.getItemContainer());
+		}
+	}
+
+	@Subscribe
+	public void onGameStateChanged(GameStateChanged event)
+	{
+		if (event.getGameState() == GameState.LOGIN_SCREEN)
+		{
+			shellsInInventory = false;
+		}
+	}
+
+	/** Reads the inventory directly. Must run on the client thread. */
+	private void refreshShellsInInventory()
+	{
+		shellsInInventory = containsShells(client.getItemContainer(InventoryID.INV));
+	}
+
+	/** @return whether a musical shell or the packed Shell collection is in the inventory */
+	boolean hasShellsInInventory()
+	{
+		return shellsInInventory;
+	}
+
+	private static boolean containsShells(ItemContainer container)
+	{
+		return container != null && containsShells(container.getItems());
+	}
+
+	/** @return true if any of the items is a musical shell or the packed Shell collection */
+	static boolean containsShells(Item[] items)
+	{
+		if (items == null)
+		{
+			return false;
+		}
+		for (Item item : items)
+		{
+			if (ShellNote.isShellItem(item.getId()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	// ---- State changes. Safe to call from any thread. ----
 
 	/** Rebuilds the song list from the built-in library plus the custom-songs setting. */
@@ -228,6 +299,12 @@ public class ShellSongsPlugin extends Plugin
 			feedbackIsError = false;
 		}
 		refreshPanel();
+	}
+
+	/** Clears the selected song, which also hides the overlay and the inventory highlight. */
+	void stopSong()
+	{
+		selectSong(null);
 	}
 
 	void restartSong()

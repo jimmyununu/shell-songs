@@ -83,13 +83,25 @@ public interface ShellSongsConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "onlyShowWithShells",
+		name = "Only show overlay with shells",
+		description = "Hide the overlay unless a musical shell or the Shell collection is in your inventory",
+		section = displaySection,
+		position = 1
+	)
+	default boolean onlyShowWithShells()
+	{
+		return true;
+	}
+
 	@Range(min = 1, max = 16)
 	@ConfigItem(
 		keyName = "overlayNoteCount",
 		name = "Upcoming notes in overlay",
 		description = "How many notes after the next one to show in the overlay",
 		section = displaySection,
-		position = 1
+		position = 2
 	)
 	default int overlayNoteCount()
 	{
@@ -101,7 +113,7 @@ public interface ShellSongsConfig extends Config
 		name = "Highlight next shell",
 		description = "Draw an outline around the shell you should play next in your inventory",
 		section = displaySection,
-		position = 2
+		position = 3
 	)
 	default boolean highlightInventory()
 	{
@@ -113,7 +125,7 @@ public interface ShellSongsConfig extends Config
 		name = "Highlight colour",
 		description = "Colour of the inventory outline",
 		section = displaySection,
-		position = 3
+		position = 4
 	)
 	default Color highlightColor()
 	{

@@ -67,6 +67,14 @@ public enum ShellNote
 	}
 
 	/**
+	 * @return true if the item is one of the seven musical shells or the packed Shell collection
+	 */
+	public static boolean isShellItem(int itemId)
+	{
+		return itemId == SHELL_COLLECTION_ITEM_ID || fromItemId(itemId) != null;
+	}
+
+	/**
 	 * Parses a note token such as {@code C}, {@code a}, {@code A#}, {@code A♯} or {@code Bb}.
 	 *
 	 * @return the matching note, or {@code null} if the token is not recognised

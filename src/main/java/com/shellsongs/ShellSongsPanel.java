@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -122,13 +123,16 @@ class ShellSongsPanel extends PluginPanel
 		content.add(Box.createVerticalStrut(8));
 
 		// Transport buttons
-		JPanel buttons = new JPanel(new GridLayout(1, 3, 4, 0));
+		JPanel buttons = new JPanel(new GridLayout(1, 4, 4, 0));
 		buttons.setBackground(ColorScheme.DARK_GRAY_COLOR);
 		buttons.setAlignmentX(Component.LEFT_ALIGNMENT);
 		buttons.setMaximumSize(new Dimension(Integer.MAX_VALUE, 26));
 		buttons.add(makeButton("Restart", plugin::restartSong));
 		buttons.add(makeButton("Back", plugin::previousNote));
 		buttons.add(makeButton("Skip", plugin::nextNote));
+		JButton stop = makeButton("Stop", plugin::stopSong);
+		stop.setToolTipText("Clear the song and hide the overlay");
+		buttons.add(stop);
 		content.add(buttons);
 		content.add(Box.createVerticalStrut(4));
 
@@ -167,6 +171,7 @@ class ShellSongsPanel extends PluginPanel
 			+ "Play the highlighted shell. The number on it is how many times in a row to play it. "
 			+ "The panel moves on when you play the right shell. "
 			+ "Click any note above to jump to it. "
+			+ "Stop clears the song and hides the overlay. "
 			+ "Add your own songs in the plugin settings.</body></html>");
 		help.setFont(FontManager.getRunescapeSmallFont());
 		help.setForeground(ColorScheme.LIGHT_GRAY_COLOR);
@@ -180,6 +185,7 @@ class ShellSongsPanel extends PluginPanel
 	{
 		JButton button = new JButton(text);
 		button.setFont(FontManager.getRunescapeSmallFont());
+		button.setMargin(new Insets(2, 4, 2, 4));
 		button.setFocusable(false);
 		button.addActionListener(e -> action.run());
 		return button;

@@ -13,10 +13,11 @@ Pick a song in the sidebar and the plugin tells you which shell to play next. Wh
 - **Click counter**: when a note repeats, the panel says how many times in a row to click that shell and counts down as you go.
 - **Loop**: tick "Loop song" in the panel (or the settings) to go straight back to the first note after the last, so short tunes keep playing.
 - **Whole-song view**: every note of the song as a row of chips. Played notes dim, the next note glows. Click any chip to jump there.
-- **Overlay**: a small on-screen box with the song title, the next shell, and the notes after it.
+- **Overlay**: a small on-screen box with the song title, the next shell, and the notes after it. It only appears while a shell (or the packed Shell collection) is in your inventory, so it stays out of the way the rest of the time. Turn "Only show overlay with shells" off in the settings to always show it.
+- **Close it when you're done**: press **Stop** in the panel, or right-click the overlay and choose **Close**, to clear the song and hide the overlay and highlight.
 - **Inventory highlight**: an outline around the shell you should play next, with the number of times in a row to play it written on it.
 - **Custom songs**: add your own in the plugin settings, one per line.
-- **Transport buttons**: Restart, Back and Skip for stepping through manually.
+- **Transport buttons**: Restart, Back, Skip and Stop for stepping through manually.
 
 ## The shells
 
