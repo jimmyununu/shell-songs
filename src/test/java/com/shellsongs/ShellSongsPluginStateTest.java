@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import net.runelite.api.Item;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,6 +23,35 @@ public class ShellSongsPluginStateTest
 		plugin = new ShellSongsPlugin();
 		song = SongParser.parseLine("Test: E D C", false);
 		plugin.selectSong(song);
+	}
+
+	@Test
+	public void stopClearsTheSong()
+	{
+		plugin.onShellPlayed(ShellNote.E, false, false);
+		plugin.stopSong();
+
+		PlaybackState state = plugin.getState();
+		assertFalse(state.hasSong());
+		assertNull(state.getSong());
+		assertEquals(0, state.getPosition());
+		assertNull(state.nextNote());
+		assertNull(state.getFeedback());
+	}
+
+	@Test
+	public void shellsAreDetectedAmongInventoryItems()
+	{
+		assertFalse(ShellSongsPlugin.containsShells((Item[]) null));
+		assertFalse(ShellSongsPlugin.containsShells(new Item[0]));
+		assertFalse(ShellSongsPlugin.containsShells(items(new Item(995, 1), new Item(-1, 0))));
+		assertTrue(ShellSongsPlugin.containsShells(items(new Item(995, 1), new Item(ShellNote.G.getItemId(), 1))));
+		assertTrue(ShellSongsPlugin.containsShells(items(new Item(ShellNote.SHELL_COLLECTION_ITEM_ID, 1))));
+	}
+
+	private static Item[] items(Item... items)
+	{
+		return items;
 	}
 
 	@Test

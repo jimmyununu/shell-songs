@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.List;
 import javax.inject.Inject;
+import net.runelite.api.MenuAction;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -13,9 +14,14 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 
 /**
  * Small on-screen box showing the selected song, the next note and the notes after it.
+ * <p>
+ * Hidden while no song is selected and, by default, while there are no shells in the inventory.
+ * Right-clicking it offers "Close", which clears the selected song.
  */
 class ShellSongsOverlay extends OverlayPanel
 {
+	static final String CLOSE_OPTION = "Close";
+
 	private final ShellSongsPlugin plugin;
 	private final ShellSongsConfig config;
 
@@ -26,12 +32,17 @@ class ShellSongsOverlay extends OverlayPanel
 		this.plugin = plugin;
 		this.config = config;
 		setPosition(OverlayPosition.TOP_LEFT);
+		addMenuEntry(MenuAction.RUNELITE_OVERLAY, CLOSE_OPTION, "Shell Songs", e -> plugin.stopSong());
 	}
 
 	@Override
 	public Dimension render(Graphics2D graphics)
 	{
 		if (!config.showOverlay())
+		{
+			return null;
+		}
+		if (config.onlyShowWithShells() && !plugin.hasShellsInInventory())
 		{
 			return null;
 		}
